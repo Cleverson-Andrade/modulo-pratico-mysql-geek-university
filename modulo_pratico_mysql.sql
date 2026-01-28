@@ -1,33 +1,68 @@
 -- ###############################################################
 -- # PROJETO: MÓDULO PRÁTICO MYSQL - GEEK UNIVERSITY (UDEMY)
+-- # PROJECT: PRACTICAL MYSQL MODULE - GEEK UNIVERSITY (UDEMY)
+-- #
 -- # Foco: Manipulação e Consulta de Dados (DQL, Agregações, Joins, Subconsultas, Funções de Data/Hora)
+-- # Focus: Data Manipulation and Querying (DQL, Aggregations, Joins, Subqueries, Date/Time Functions)
 -- ###############################################################
 -- Autor: Cleverson Moura Andrade
-/* Descrição: Este script SQL contém a criação de diversos bancos de dados,
- tabelas, inserção de dados e uma vasta gama de consultas (DQL)
- desenvolvidas durante o módulo prático de MySQL do curso */
+-- Author: Cleverson Moura Andrade
+/*
+Descrição: Este script SQL contém a criação de diversos bancos de dados,
+tabelas, inserção de dados e uma vasta gama de consultas (DQL)
+desenvolvidas durante o módulo prático de MySQL do curso.
+
+Description: This SQL script contains the creation of multiple databases,
+tables, data insertion, and a wide range of queries (DQL)
+developed during the practical MySQL module of the course.
+*/
 -- "Bancos de Dados SQL e NoSQL do Básico ao Avançado" da Geek University.
+-- "SQL and NoSQL Databases from Basic to Advanced" by Geek University.
+
 --  Criação e gerenciamento de esquemas (DDL)
+--  Schema creation and management (DDL)
+
 -- - Inserção de dados (DML)
+-- - Data insertion (DML)
+
 -- - Filtragem básica e avançada (WHERE)
+-- - Basic and advanced filtering (WHERE)
+
 -- - Diferentes tipos de JOINS (INNER, LEFT, RIGHT, CROSS, FULL OUTER (emulado), SELF JOIN)
+-- - Different types of JOINS (INNER, LEFT, RIGHT, CROSS, FULL OUTER (emulated), SELF JOIN)
+
 -- - Funções de agregação (MAX, MIN, AVG, ROUND, COUNT, SUM)
+-- - Aggregation functions (MAX, MIN, AVG, ROUND, COUNT, SUM)
+
 -- - Agrupamento de dados (GROUP BY)
+-- - Data grouping (GROUP BY)
+
 -- - Filtragem de grupos (HAVING)
+-- - Group filtering (HAVING)
+
 -- - Ordenação de resultados (ORDER BY)
+-- - Result ordering (ORDER BY)
+
 -- - Subconsultas
+-- - Subqueries
+
 -- - Manipulação de datas e horas com funções específicas
+-- - Date and time manipulation using specific functions
 -- ###############################################################
 
 -- ####################################################################################
 -- # BANCO DE DADOS: secao05 (Exemplo de Produtos e Tipos de Produto)
--- # Foco: SELECT com WHERE, Consulta Simples em Múltiplas Tabelas (Produto Cartesiano) #
+-- # DATABASE: secao05 (Products and Product Types Example)
+-- #
+-- # Foco: SELECT com WHERE, Consulta Simples em Múltiplas Tabelas (Produto Cartesiano)
+-- # Focus: SELECT with WHERE, Simple Queries on Multiple Tables (Cartesian Product)
 -- ####################################################################################
 
 CREATE DATABASE secao05;
 USE secao05;
 
 -- Criação da tabela de tipos de produto
+-- Creation of the product types table
 CREATE TABLE tipos_produto (
     codigo INT NOT NULL AUTO_INCREMENT,
     descricao VARCHAR(30) NOT NULL,
@@ -35,6 +70,7 @@ CREATE TABLE tipos_produto (
 );
 
 -- Criação da tabela de produtos
+-- Creation of the products table
 CREATE TABLE produtos(
     codigo INT NOT NULL AUTO_INCREMENT,
     descricao VARCHAR(30) NOT NULL,
@@ -45,24 +81,30 @@ CREATE TABLE produtos(
 );
 
 -- Inserção de dados na tabela tipos_produto
+-- Data insertion into the product types table
 INSERT INTO tipos_produto (descricao) VALUES ('Computador');
 INSERT INTO tipos_produto (descricao) VALUES ('Impressora');
 
 -- Inserção de dados na tabela produtos
+-- Data insertion into the products table
 INSERT INTO produtos (descricao, preco, codigo_tipo) VALUES ('Desktop', '1200', 1);
 INSERT INTO produtos (descricao, preco, codigo_tipo) VALUES ('Laptop', '1800', 1);
 INSERT INTO produtos (descricao, preco, codigo_tipo) VALUES ('Impr. Jato Tinta', '300', 2);
 INSERT INTO produtos (descricao, preco, codigo_tipo) VALUES ('Impr. Laser', '500', 2);
 
 -- Consultas de seleção básica com WHERE
+-- Basic selection queries using WHERE
 SELECT * FROM tipos_produto WHERE codigo = 1;
 SELECT codigo, descricao FROM tipos_produto WHERE codigo = 2;
 SELECT * FROM produtos WHERE descricao = 'Laptop';
 SELECT codigo, descricao, codigo_tipo FROM produtos WHERE preco <= 500;
 
 -- Consulta em múltiplas tabelas usando Produto Cartesiano (Junção Implícita)
+-- Query on multiple tables using Cartesian Product (Implicit Join)
 -- Pergunta: Como listar o código, descrição e preço de todos os produtos,
 -- juntamente com a descrição do tipo de produto correspondente?
+-- Question: How to list the code, description, and price of all products,
+-- along with the description of the corresponding product type?
 SELECT
     p.codigo AS Código,
     p.descricao AS Descrição,
@@ -74,16 +116,19 @@ FROM
 WHERE
     p.codigo_tipo = tp.codigo;
 
-
 -- ###########################################################################
 -- # BANCO DE DADOS: juncao (Exemplo de Clientes, Profissões e Consumidores) #
--- # Foco: Diversos tipos de JOINS (INNER, LEFT, RIGHT, CROSS, FULL OUTER, SELF) #
+-- # DATABASE: juncao (Clients, Professions, and Consumers Example)         #
+-- #                                                                         #
+-- # Foco: Diversos tipos de JOINS (INNER, LEFT, RIGHT, CROSS, FULL OUTER, SELF)
+-- # Focus: Various types of JOINS (INNER, LEFT, RIGHT, CROSS, FULL OUTER, SELF)
 -- ###########################################################################
 
 CREATE DATABASE juncao;
 USE juncao;
 
 -- Criação da tabela de profissões
+-- Creation of the professions table
 CREATE TABLE profissoes (
     id INT NOT NULL AUTO_INCREMENT,
     cargo VARCHAR(60) NOT NULL,
@@ -91,6 +136,7 @@ CREATE TABLE profissoes (
 );
 
 -- Criação da tabela de clientes
+-- Creation of the clients table
 CREATE TABLE clientes (
     id INT NOT NULL AUTO_INCREMENT,
     nome VARCHAR(60) NOT NULL,
@@ -102,6 +148,7 @@ CREATE TABLE clientes (
 );
 
 -- Criação da tabela de consumidor (para Self Join)
+-- Creation of the consumer table (for Self Join)
 CREATE TABLE consumidor (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(50) NOT NULL,
@@ -113,25 +160,31 @@ CREATE TABLE consumidor (
 );
 
 -- Inserção de dados na tabela profissoes
+-- Data insertion into the professions table
 INSERT INTO profissoes (cargo) VALUES ('Programador');
 INSERT INTO profissoes (cargo) VALUES ('Analista de Sistemas');
 INSERT INTO profissoes (cargo) VALUES ('Suporte');
 INSERT INTO profissoes (cargo) VALUES ('Gerente');
 
 -- Inserção de dados na tabela clientes
+-- Data insertion into the clients table
 INSERT INTO clientes (nome, data_nascimento, telefone, id_profissao) VALUES ('João Pereira', '1981-06-15', '1234-5688', 1);
 INSERT INTO clientes (nome, data_nascimento, telefone, id_profissao) VALUES ('Ricardo da Silva', '1973-10-10', '2234-5669', 2);
 INSERT INTO clientes (nome, data_nascimento, telefone, id_profissao) VALUES ('Felipe Oliveira', '1987-08-01', '4234-5640', 3);
 INSERT INTO clientes (nome, data_nascimento, telefone, id_profissao) VALUES ('Mario Pirez', '1991-02-05', '5234-5621', 1);
 
 -- Inserção de dados na tabela consumidor
+-- Data insertion into the consumer table
 INSERT INTO consumidor (nome, contato, endereco, cidade, cep, pais) VALUES ('Alfredo Nunes', 'Maria Nunes', 'Rua da paz, 47', 'São Paulo', '123.456-87', 'Brasil');
 INSERT INTO consumidor (nome, contato, endereco, cidade, cep, pais) VALUES ('Ana Trujillo', 'Guilherme Souza', 'Rua Dourada, 452', 'Goiania', '232.984-23', 'Brasil');
 INSERT INTO consumidor (nome, contato, endereco, cidade, cep, pais) VALUES ('Leandro Veloz', 'Pedro Siqueira', 'Rua Vazia, 72', 'São Paulo', '936.738-23', 'Brasil');
 
 -- JUNÇÃO DE PRODUTO CARTESIANO (Junção Implícita com WHERE)
+-- CARTESIAN PRODUCT JOIN (Implicit Join with WHERE)
 -- Pergunta: Listar ID, nome, data de nascimento, telefone de todos os clientes,
 -- juntamente com o cargo de sua respectiva profissão.
+-- Question: List ID, name, birth date, and phone of all clients,
+-- along with the role of their respective profession.
 SELECT
     c.id,
     c.nome AS Nome,
@@ -146,6 +199,8 @@ WHERE
 
 -- Pergunta: Exibir o nome dos clientes e suas datas de nascimento,
 -- apenas para aqueles clientes que são 'Analistas de Sistemas'.
+-- Question: Display client names and birth dates
+-- only for clients who are 'Systems Analysts'.
 SELECT
     c.nome AS Nome,
     c.data_nascimento AS Data_de_Nascimento,
@@ -159,6 +214,8 @@ WHERE
 
 -- Pergunta: Listar nome do cliente, telefone e cargo da profissão
 -- para todos os clientes que nasceram após 1985.
+-- Question: List client name, phone, and profession role
+-- for all clients born after 1985.
 SELECT
     c.nome AS Nomes,
     c.telefone AS Contato,
@@ -171,6 +228,7 @@ WHERE
     AND YEAR(c.data_nascimento) > 1985;
 
 -- INNER JOIN (Junção Explícita)
+-- INNER JOIN (Explicit Join)
 SELECT
     c.id,
     c.nome,
@@ -186,6 +244,8 @@ ON
 
 -- Pergunta: Crie uma consulta que retorne o ID do cliente, o nome completo do cliente,
 -- a data de nascimento, o telefone e o cargo de sua profissão, usando INNER JOIN.
+-- Question: Create a query that returns the client ID, full client name,
+-- birth date, phone number, and profession role, using INNER JOIN.
 SELECT
     c.id,
     c.nome AS Nomes,
@@ -201,6 +261,8 @@ ON
 
 -- Pergunta: Mostre o nome do cliente, o telefone e o cargo da profissão,
 -- apenas para aqueles clientes que possuem o cargo de 'Suporte'.
+-- Question: Show the client name, phone number, and profession role
+-- only for clients who have the role 'Support'.
 SELECT
     c.nome AS Nome,
     c.telefone AS Contato,
@@ -216,6 +278,8 @@ ON
 -- Pergunta: Liste o ID do cliente, o nome do cliente e o cargo da profissão,
 -- somente para os clientes que nasceram entre 1970 e 1985
 -- (inclusive ambos os anos).
+-- Question: List the client ID, client name, and profession role
+-- only for clients born between 1970 and 1985 (inclusive).
 SELECT
     c.id,
     c.nome AS Nome,
@@ -232,6 +296,9 @@ ON
 -- Pergunta: Exiba o nome do cliente e o cargo da profissão para todos os registros,
 -- e ordene o resultado primeiramente pelo nome da profissão em ordem alfabética e,
 -- em seguida, pelo nome do cliente também em ordem alfabética.
+-- Question: Display the client name and profession role for all records,
+-- ordering the result first by profession name alphabetically and
+-- then by client name alphabetically.
 SELECT
     c.nome AS Nome,
     p.cargo AS Profissão
@@ -246,11 +313,13 @@ ORDER BY
     c.nome ASC;
 
 -- LEFT OUTER JOIN
+-- LEFT OUTER JOIN
 SELECT *
 FROM clientes
 LEFT OUTER JOIN profissoes
 ON clientes.id_profissao = profissoes.id;
 
+-- RIGHT OUTER JOIN
 -- RIGHT OUTER JOIN
 SELECT *
 FROM clientes
@@ -258,10 +327,13 @@ RIGHT OUTER JOIN profissoes
 ON clientes.id_profissao = profissoes.id;
 
 -- Full Outer Join (Não funciona nativamente no MySQL - Emulação via UNION)
+-- Full Outer Join (Not natively supported in MySQL - Emulated via UNION)
 -- A sintaxe abaixo não é suportada diretamente no MySQL:
+-- The syntax below is not directly supported in MySQL:
 -- SELECT * FROM clientes FULL OUTER JOIN profissoes ON clientes.id_profissao = profissoes.id;
 
 -- Emulação de FULL OUTER JOIN no MySQL usando UNION de LEFT e RIGHT JOIN
+-- Emulation of FULL OUTER JOIN in MySQL using UNION of LEFT and RIGHT JOIN
 SELECT *
 FROM clientes
 LEFT OUTER JOIN profissoes
@@ -272,6 +344,7 @@ FROM clientes
 RIGHT OUTER JOIN profissoes
 ON clientes.id_profissao = profissoes.id;
 
+-- CROSS JOIN
 -- CROSS JOIN
 SELECT
     c.id,
@@ -285,6 +358,7 @@ CROSS JOIN
     profissoes AS p;
 
 -- SELF JOIN (Junção da tabela 'consumidor' com ela mesma)
+-- SELF JOIN (Joining the 'consumidor' table with itself)
 SELECT
     a.nome AS Consumidor1,
     b.nome AS Consumidor2,
@@ -299,16 +373,19 @@ ON
 ORDER BY
     a.cidade;
 
-
 -- ###############################################################################
 -- # BANCO DE DADOS: agregacao (Exemplo de Produtos e Categorias)                #
--- # Foco: Funções de Agregação (MAX, MIN, AVG, ROUND, COUNT, SUM), GROUP BY, HAVING #
+-- # DATABASE: agregacao (Products and Categories Example)                      #
+-- #                                                                             #
+-- # Foco: Funções de Agregação (MAX, MIN, AVG, ROUND, COUNT, SUM), GROUP BY, HAVING
+-- # Focus: Aggregation Functions (MAX, MIN, AVG, ROUND, COUNT, SUM), GROUP BY, HAVING
 -- ###############################################################################
 
 CREATE DATABASE agregacao;
 USE agregacao;
 
 -- Criação da tabela de categorias
+-- Creation of the categories table
 CREATE TABLE categorias (
     id INT NOT NULL AUTO_INCREMENT,
     nome VARCHAR(60) NOT NULL,
@@ -316,6 +393,7 @@ CREATE TABLE categorias (
 );
 
 -- Criação da tabela de produtos
+-- Creation of the products table
 CREATE TABLE produtos (
     id INT NOT NULL AUTO_INCREMENT,
     descricao VARCHAR(60) NOT NULL,
@@ -327,42 +405,53 @@ CREATE TABLE produtos (
 );
 
 -- Inserção de dados na tabela categorias
+-- Data insertion into the categories table
 INSERT INTO categorias (nome) VALUES ('Material Escolar');
 INSERT INTO categorias (nome) VALUES ('Acessório Informática');
 INSERT INTO categorias (nome) VALUES ('Material Escritório');
 INSERT INTO categorias (nome) VALUES ('Game');
 
 -- Inserção de dados na tabela produtos
+-- Data insertion into the products table
 INSERT INTO produtos (descricao, preco_venda, preco_custo, id_categoria) VALUES ('Caderno', '5.45', '2.30', 1);
 INSERT INTO produtos (descricao, preco_venda, preco_custo, id_categoria) VALUES ('Caneta', '1.20', '0.45', 1);
 INSERT INTO produtos (descricao, preco_venda, preco_custo, id_categoria) VALUES ('Pendrive 32GB', '120.54', '32.55', 2);
 INSERT INTO produtos (descricao, preco_venda, preco_custo, id_categoria) VALUES ('Mouse', '17.00', '4.30', 2);
 
 -- Funções de Agregação
+-- Aggregation Functions
 
 -- Pergunta: Qual é o preço de venda mais alto entre todos os produtos cadastrados?
+-- Question: What is the highest sale price among all registered products?
 SELECT MAX(preco_venda)
 FROM produtos;
 
 -- Pergunta: Qual é o preço de venda mais baixo entre todos os produtos cadastrados?
+-- Question: What is the lowest sale price among all registered products?
 SELECT MIN(preco_venda)
 FROM produtos;
 
 -- Pergunta: Calcule o preço de venda médio de todos os produtos.
+-- Question: Calculate the average sale price of all products.
 SELECT AVG(preco_venda)
 FROM produtos;
 
 -- Pergunta: Calcule o preço de venda médio de todos os produtos,
 -- mas arredonde o resultado para duas casas decimais.
+-- Question: Calculate the average sale price of all products,
+-- rounding the result to two decimal places.
 SELECT ROUND(AVG(preco_venda), 2)
 FROM produtos;
 
 -- Pergunta: Quantos produtos estão cadastrados no total?
+-- Question: How many products are registered in total?
 SELECT COUNT(preco_venda)
 FROM produtos;
 
 -- Agrupamento de Dados (GROUP BY)
+-- Data Grouping (GROUP BY)
 -- Pergunta: Mostre o nome de cada categoria e a quantidade de produtos que pertencem a ela.
+-- Question: Show each category name and the number of products that belong to it.
 SELECT
     c.nome AS Categoria,
     COUNT(p.id) AS Quantidade_Produtos
@@ -376,7 +465,9 @@ GROUP BY
     c.nome;
 
 -- Filtragem de Grupos (HAVING)
+-- Group Filtering (HAVING)
 -- Pergunta: Liste o nome das categorias que possuem mais de 1 produto.
+-- Question: List the names of categories that have more than 1 product.
 SELECT
     c.nome AS Categoria,
     COUNT(p.id) AS Quantidade_Produtos
@@ -391,15 +482,17 @@ GROUP BY
 HAVING
     COUNT(p.id) > 1;
 
-
 -- ##############################################################################
+-- # DATABASE: agrupamento (Products, Manufacturers and Types Example)        #
 -- # BANCO DE DADOS: agrupamento (Exemplo de Produtos, Fabricantes e Tipos)   #
+-- # Focus: GROUP BY, HAVING, Multiple JOINS, ORDER BY                        #
 -- # Foco: GROUP BY, HAVING, Múltiplos JOINS, ORDER BY                       #
 -- ##############################################################################
 
 CREATE DATABASE agrupamento;
 USE agrupamento;
 
+-- Table creation: product types
 -- Criação da tabela de tipos
 CREATE TABLE tipos (
     id INT NOT NULL AUTO_INCREMENT,
@@ -407,6 +500,7 @@ CREATE TABLE tipos (
     PRIMARY KEY (id)
 );
 
+-- Table creation: manufacturers
 -- Criação da tabela de fabricantes
 CREATE TABLE fabricantes (
     id INT NOT NULL AUTO_INCREMENT,
@@ -414,6 +508,7 @@ CREATE TABLE fabricantes (
     PRIMARY KEY (id)
 );
 
+-- Table creation: products
 -- Criação da tabela de produtos
 CREATE TABLE produtos (
     id INT NOT NULL AUTO_INCREMENT,
@@ -426,6 +521,7 @@ CREATE TABLE produtos (
     FOREIGN KEY (id_tipo) REFERENCES tipos(id)
 );
 
+-- Data insertion into table tipos (product types)
 -- Inserção de dados na tabela tipos
 INSERT INTO tipos (nome) VALUES ('Console');
 INSERT INTO tipos (nome) VALUES ('Notebook');
@@ -435,6 +531,7 @@ INSERT INTO tipos (nome) VALUES ('Sofá');
 INSERT INTO tipos (nome) VALUES ('Armário');
 INSERT INTO tipos (nome) VALUES ('Refrigerador');
 
+-- Data insertion into table fabricantes (manufacturers)
 -- Inserção de dados na tabela fabricantes
 INSERT INTO fabricantes (nome) VALUES ('Sony');
 INSERT INTO fabricantes (nome) VALUES ('Dell');
@@ -446,6 +543,7 @@ INSERT INTO fabricantes (nome) VALUES ('Magno');
 INSERT INTO fabricantes (nome) VALUES ('CCE');
 INSERT INTO fabricantes (nome) VALUES ('Nintendo');
 
+-- Data insertion into table produtos (products)
 -- Inserção de dados na tabela produtos
 INSERT INTO produtos (nome, id_fabricante, quantidade, id_tipo) VALUES ('Playstation 3', 1, 100, 1);
 INSERT INTO produtos (nome, id_fabricante, quantidade, id_tipo) VALUES ('Core 2 Duo 4GB RAM 500GB HD', 2, 200, 2);
@@ -458,10 +556,14 @@ INSERT INTO produtos (nome, id_fabricante, quantidade, id_tipo) VALUES ('Armári
 INSERT INTO produtos (nome, id_fabricante, quantidade, id_tipo) VALUES ('Refrigerador 420L', 8, 200, 7);
 INSERT INTO produtos (nome, id_fabricante, quantidade, id_tipo) VALUES ('Wii 120GB', 8, 250, 1);
 
+-- Cartesian product query (implicit join without WHERE, demonstration only)
 -- Consulta de Produto Cartesiano (apenas para demonstração de junção implícita sem WHERE)
 SELECT * FROM fabricantes, produtos, tipos;
 
--- Exercício 1: Mostre o nome de cada fabricante e a quantidade total de produtos que cada um fabrica.
+-- Exercise 1:
+-- Show the name of each manufacturer and the total quantity of products they produce.
+-- Exercício 1:
+-- Mostre o nome de cada fabricante e a quantidade total de produtos que cada um fabrica.
 SELECT
     f.nome AS Fabricante,
     SUM(p.quantidade) AS Quantidade_Total
@@ -474,7 +576,10 @@ ON
 GROUP BY
     f.nome;
 
--- Exercício 2: Liste o nome dos fabricantes que possuem mais de 2 produtos cadastrados.
+-- Exercise 2:
+-- List the names of manufacturers that have more than 2 products registered.
+-- Exercício 2:
+-- Liste o nome dos fabricantes que possuem mais de 2 produtos cadastrados.
 SELECT
     f.nome AS Nome
 FROM
@@ -488,7 +593,11 @@ GROUP BY
 HAVING
     COUNT(p.quantidade) > 2;
 
--- Exercício 3: Exiba o nome de todos os produtos, o nome do seu fabricante e o nome do seu tipo,
+-- Exercise 3:
+-- Display the name of all products, their manufacturer name and product type name,
+-- ordered alphabetically by product name (A-Z).
+-- Exercício 3:
+-- Exiba o nome de todos os produtos, o nome do seu fabricante e o nome do seu tipo,
 -- ordenando os resultados pelo nome do produto em ordem alfabética crescente (A-Z).
 SELECT
     p.nome AS Produto,
@@ -507,8 +616,12 @@ ON
 ORDER BY
     p.nome ASC;
 
--- Exercício 4: Liste o nome dos produtos, o nome do fabricante e a quantidade em estoque.
--- Ordene os resultados pela quantidade em estoque, da maior para a menor (descrescente).
+-- Exercise 4:
+-- List the product name, manufacturer name and stock quantity.
+-- Order results by stock quantity from highest to lowest.
+-- Exercício 4:
+-- Liste o nome dos produtos, o nome do fabricante e a quantidade em estoque.
+-- Ordene os resultados pela quantidade em estoque, da maior para a menor.
 SELECT
     p.nome AS Nome,
     f.nome AS Fabricante,
@@ -522,15 +635,17 @@ ON
 ORDER BY
     p.quantidade DESC;
 
-
 -- ######################################################################
+-- # DATABASE: subconsulta (Offices, Employees and Payments Example)   #
 -- # BANCO DE DADOS: subconsulta (Exemplo de Escritórios, Funcionários e Pagamentos) #
--- # Foco: Subconsultas, Funções de Data e Hora                           #
+-- # Focus: Subqueries, Date and Time Functions                         #
+-- # Foco: Subconsultas, Funções de Data e Hora                         #
 -- ######################################################################
 
 CREATE DATABASE subconsulta;
 USE subconsulta;
 
+-- Table creation: offices
 -- Criação da tabela de escritórios
 CREATE TABLE escritorios (
     id INT NOT NULL AUTO_INCREMENT,
@@ -538,6 +653,7 @@ CREATE TABLE escritorios (
     PRIMARY KEY (id)
 );
 
+-- Table creation: employees
 -- Criação da tabela de funcionários
 CREATE TABLE funcionarios (
     id INT NOT NULL AUTO_INCREMENT,
@@ -548,6 +664,7 @@ CREATE TABLE funcionarios (
     FOREIGN KEY (id_escritorio) REFERENCES escritorios(id)
 );
 
+-- Table creation: payments
 -- Criação da tabela de pagamentos
 CREATE TABLE pagamentos (
     id INT NOT NULL AUTO_INCREMENT,
@@ -558,32 +675,46 @@ CREATE TABLE pagamentos (
     FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id)
 );
 
+-- Data insertion into table escritorios (offices)
 -- Inserção de dados na tabela escritorios
 INSERT INTO escritorios (pais) VALUES ('Brasil');
 INSERT INTO escritorios (pais) VALUES ('Estados Unidos');
 INSERT INTO escritorios (pais) VALUES ('Alemanha');
 INSERT INTO escritorios (pais) VALUES ('França');
 
+-- Data insertion into table funcionarios (employees)
 -- Inserção de dados na tabela funcionarios
 INSERT INTO funcionarios (nome, sobrenome, id_escritorio) VALUES ('Pedro', 'Souza', 1);
 INSERT INTO funcionarios (nome, sobrenome, id_escritorio) VALUES ('Sandra', 'Rubin', 2);
 INSERT INTO funcionarios (nome, sobrenome, id_escritorio) VALUES ('Mikail', 'Schumer', 3);
 INSERT INTO funcionarios (nome, sobrenome, id_escritorio) VALUES ('Olivier', 'Glaçon', 4);
 
+-- Data insertion into table pagamentos (payments)
 -- Inserção de dados na tabela pagamentos
 INSERT INTO pagamentos (id_funcionario, salario, data) VALUES (1, '5347.55', '2019-03-17');
 INSERT INTO pagamentos (id_funcionario, salario, data) VALUES (2, '9458.46', '2019-03-17');
 INSERT INTO pagamentos (id_funcionario, salario, data) VALUES (3, '4669.67', '2019-03-17');
 INSERT INTO pagamentos (id_funcionario, salario, data) VALUES (4, '2770.32', '2019-03-17');
 
+-- Subqueries (examples)
 -- Subconsultas (Exemplos)
 
+-- Example 1: Select employees who work in Brazil (using subquery)
 -- Exemplo 1: Selecionar funcionários que trabalham no Brasil (com subconsulta)
-SELECT nome, sobrenome FROM funcionarios WHERE id_escritorio IN (SELECT id FROM escritorios WHERE pais = 'Brasil');
+SELECT nome, sobrenome 
+FROM funcionarios 
+WHERE id_escritorio IN (
+    SELECT id FROM escritorios WHERE pais = 'Brasil'
+);
 
+-- Example 1 (without subquery - using JOIN for comparison)
 -- Exemplo 1 (Sem subconsulta - Usando JOIN para comparação)
-SELECT nome, sobrenome FROM funcionarios, escritorios AS e WHERE id_escritorio = e.id AND e.pais = 'Brasil';
+SELECT nome, sobrenome 
+FROM funcionarios, escritorios AS e 
+WHERE id_escritorio = e.id 
+AND e.pais = 'Brasil';
 
+-- Example 2: Employee with the highest salary (using subquery)
 -- Exemplo 2: Funcionário com o maior salário (com subconsulta)
 SELECT
     f.nome,
@@ -599,6 +730,7 @@ WHERE
     AND f.id = p.id_funcionario
     AND salario = (SELECT MAX(salario) FROM pagamentos);
 
+-- Example 3: Employees with salary below the average (using subquery)
 -- Exemplo 3: Funcionários com salário abaixo da média (com subconsulta)
 SELECT
     f.nome,
@@ -614,84 +746,110 @@ WHERE
     AND f.id = p.id_funcionario
     AND salario < (SELECT AVG(salario) FROM pagamentos);
 
+-- Date and Time Functions
 -- Funções de Data e Hora
 
+-- CURDATE(): Returns the current date
 -- CURDATE(): Retorna a data atual
 SELECT CURDATE() AS 'Data Atual';
 
+-- CURTIME(): Returns the current time
 -- CURTIME(): Retorna a hora atual
 SELECT CURTIME() AS 'Hora Atual';
 
+-- CURRENT_TIME(): Returns the current time (alias of CURTIME)
 -- CURRENT_TIME(): Retorna a hora atual (sinônimo de CURTIME())
 SELECT CURRENT_TIME() AS 'Hora Atual';
 
+-- DATE_ADD(date, INTERVAL value unit): Adds an interval to a date
 -- DATE_ADD(data, INTERVAL valor unidade): Adiciona um intervalo à data
 SELECT DATE_ADD(CURDATE(), INTERVAL 3 DAY) AS 'Data de Vencimento';
 
+-- DATE_SUB(date, INTERVAL value unit): Subtracts an interval from a date
 -- DATE_SUB(data, INTERVAL valor unidade): Subtrai um intervalo da data
 SELECT DATE_SUB(CURDATE(), INTERVAL 10 DAY) AS 'Data de Matrícula';
 
+-- DATEDIFF(date1, date2): Returns difference in days between two dates
 -- DATEDIFF(data1, data2): Retorna a diferença em dias entre duas datas
 SELECT DATEDIFF(CURDATE(), DATE_SUB(CURDATE(), INTERVAL 10 DAY)) AS 'Dias em Atraso';
 
+-- DATE_FORMAT(date, format): Formats a date
 -- DATE_FORMAT(data, formato): Formata uma data
 SELECT DATE_FORMAT(CURDATE(), '%d/%m/%Y') AS 'Data Atual Formatada';
 
--- DAYNAME(data): Retorna o nome do dia da semana (em inglês, se não configurado)
+-- DAYNAME(date): Returns the weekday name
+-- DAYNAME(data): Retorna o nome do dia da semana
 SELECT DAYNAME(CURDATE()) AS 'Dia da Semana';
 
+-- DAYOFMONTH(date): Returns the day of the month
 -- DAYOFMONTH(data): Retorna o dia do mês
 SELECT DAYOFMONTH(CURDATE()) AS 'Dia do Mês';
 
--- DAYOFWEEK(data): Retorna o dia da semana como número (1=Domingo, 2=Segunda...)
+-- DAYOFWEEK(date): Returns the weekday as a number (1=Sunday)
+-- DAYOFWEEK(data): Retorna o dia da semana como número (1=Domingo)
 SELECT DAYOFWEEK(CURDATE()) AS 'Dia da Semana (Número)';
 
+-- DAYOFYEAR(date): Returns the day of the year
 -- DAYOFYEAR(data): Retorna o dia do ano
 SELECT DAYOFYEAR(CURDATE()) AS 'Dia do Ano';
 
+-- FROM_DAYS(days): Converts days to date
 -- FROM_DAYS(número_de_dias): Converte um número de dias para data
 SELECT FROM_DAYS(780500) AS 'Data a Partir de Dias';
 
+-- NOW(): Returns current date and time
 -- NOW(): Retorna a data e hora atuais
 SELECT NOW() AS 'Data/Hora Atual';
 SELECT DATE_FORMAT(NOW(), '%d/%m/%Y %H:%i:%s') AS 'Data/Hora Atual Formatada';
 SELECT DATE_FORMAT(CURRENT_TIMESTAMP(), '%d/%m/%Y %H:%i:%s') AS 'Data/Hora Atual Formatada';
 
--- TIME(datetime): Extrai a parte da hora de um DATETIME
+-- TIME(datetime): Extracts time part
+-- TIME(datetime): Extrai a parte da hora
 SELECT TIME(CURRENT_TIMESTAMP()) AS 'Hora';
 
--- SEC_TO_TIME(segundos): Converte segundos para formato de tempo (HH:MM:SS)
+-- SEC_TO_TIME(seconds): Converts seconds to time
+-- SEC_TO_TIME(segundos): Converte segundos para tempo
 SELECT SEC_TO_TIME(2000) AS 'Tempo Total (HH:MM:SS)';
 
+-- TIME_TO_SEC(time): Converts time to seconds
 -- TIME_TO_SEC(time): Converte tempo para segundos
 SELECT TIME_TO_SEC(TIME(CURRENT_TIMESTAMP())) AS 'Hora em Segundos';
 
--- HOUR(time), MINUTE(time), SECOND(time): Extrai partes do tempo
+-- HOUR(), MINUTE(), SECOND(): Extracts time parts
+-- HOUR(), MINUTE(), SECOND(): Extrai partes do tempo
 SELECT
     HOUR(TIME(CURRENT_TIMESTAMP())) AS Hora,
     MINUTE(TIME(CURRENT_TIMESTAMP())) AS Minutos,
     SECOND(TIME(CURRENT_TIMESTAMP())) AS Segundos;
 
--- PERIOD_DIFF(P1, P2): Retorna a diferença em meses entre períodos no formato YYYYMM ou YYMM
+-- PERIOD_DIFF(P1, P2): Returns difference in months between periods
+-- PERIOD_DIFF(P1, P2): Retorna a diferença em meses entre períodos
 SELECT PERIOD_DIFF(201912, 201905) AS 'Meses Restantes (Exemplo)';
 
--- TIMEDIFF(expr1, expr2): Retorna a diferença entre duas expressões de tempo/data_hora
+-- TIMEDIFF(expr1, expr2): Returns time difference
+-- TIMEDIFF(expr1, expr2): Retorna a diferença entre tempos
 SELECT TIMEDIFF('12:35:34', '12:30:46') AS Diferença;
 
--- QUARTER(data): Retorna o trimestre do ano (1-4)
+-- QUARTER(date): Returns quarter of the year
+-- QUARTER(data): Retorna o trimestre do ano
 SELECT QUARTER('2019-03-17') AS 'Trimestre do Ano';
 
--- WEEK(data): Retorna o número da semana do ano
+-- WEEK(date): Returns week number
+-- WEEK(data): Retorna o número da semana
 SELECT WEEK('2019-03-17') AS 'Semana do Ano';
 
--- WEEKDAY(data): Retorna o dia da semana como número (0=Segunda, 1=Terça...)
+-- WEEKDAY(date): Returns weekday number (0=Monday)
+-- WEEKDAY(data): Retorna o dia da semana como número (0=Segunda)
 SELECT WEEKDAY('2019-03-17') AS 'Dia da Semana (MySQL - 0=Seg)';
 
+-- YEAR(date): Returns year
 -- YEAR(data): Retorna o ano
 SELECT YEAR('2019-03-17') AS 'Ano';
 
+-- MONTH(date): Returns month
 -- MONTH(data): Retorna o mês
 SELECT MONTH(NOW()) AS 'Mês';
 
+-- DAY(date): Returns day of month
 -- DAY(data): Retorna o dia do mês
 SELECT DAY('2019-03-17') AS 'Dia';
