@@ -5,7 +5,7 @@
 -- # Foco: Manipulação e Consulta de Dados (DQL, Agregações, Joins, Subconsultas, Funções de Data/Hora)
 -- # Focus: Data Manipulation and Querying (DQL, Aggregations, Joins, Subqueries, Date/Time Functions)
 -- ###############################################################
--- Autor: Cleverson Moura Andrade
+
 -- Author: Cleverson Moura Andrade
 /*
 Descrição: Este script SQL contém a criação de diversos bancos de dados,
